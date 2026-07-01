@@ -1,0 +1,25 @@
+Package: zhGebiete
+Type: Package
+Title: Package for accessing the Gebietsstammdaten API of the Canton of Zürich
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Livio", "Bätscher",
+      email = "livio_999@hotmail.com",
+      role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0002-2989-930X")
+    )
+  )
+Description: Provides an interface to the Gebietsstammdaten API of the
+  Statistical Office of the Canton of Zurich. This package allows users to
+  retrieve data for geographic units such as municipalities  (Gemeinden), 
+  districts (Bezirke), and regions directly from R. It serves as an efficient
+  tool for accessing data for analyses and visualizations.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends:
+  R (>= 4.1.0)
+Imports:
+  httr2,
+  rlang
+Config/roxygen2/version: 8.0.0
