@@ -5,7 +5,7 @@ test_that("test functionality of parse_to_df", {
 
   # Convert to R object
   data_1 <- jsonlite::fromJSON(json_string_1)
-  data_2 <- jsonlite::fromJSON(json_string_2) # Convert to R object
+  data_2 <- jsonlite::fromJSON(json_string_2)
   nested_data <- list(data_1, data_2) # Combine into list
 
   result_1 <- parse_to_df(list = data_1) # Remove "gemeinden"
