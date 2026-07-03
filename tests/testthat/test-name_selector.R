@@ -12,23 +12,28 @@ test_that("test functionality of select_name", {
   make_reader <- function(vals) {
     i <- 1
     function(prompt = "") {
-      v <- vals[i]; i <<- i + 1; v
+      v <- vals[i]
+      i <<- i + 1
+      v
     }
   }
 
   # Mock the console input
   result_1 <- select_name(list = data_1)
-  result_2 <- with_mocked_bindings(
-    select_name(list = data_2),
-    readline = make_reader(c(NA, "0", "99", "", "1")),
-    .package = "base"
+  capture_output(
+    result_2 <- with_mocked_bindings(
+      select_name(list = data_2),
+      readline = make_reader(c(NA, "0", "99", "", "1")),
+      .package = "base"
+    )
   )
-  result_3 <- with_mocked_bindings(
-    select_name(list = nested_data),
-    readline = make_reader(c(NA, "0", "99", "", "1")),
-    .package = "base"
+  capture_output(
+    result_3 <- with_mocked_bindings(
+      select_name(list = nested_data),
+      readline = make_reader(c(NA, "0", "99", "", "1")),
+      .package = "base"
+    )
   )
-
 
   # Perform tests
   expect_s3_class(result_1, "data.frame")
