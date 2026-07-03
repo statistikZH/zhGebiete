@@ -7,6 +7,8 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Codecov test
+coverage](https://codecov.io/gh/statistikZH/zhGebiete/graph/badge.svg)](https://app.codecov.io/gh/statistikZH/zhGebiete)
 <!-- badges: end -->
 
 Das R-Paket `zhGebiete` bietet Nutzenden benutzerfreundliche und
