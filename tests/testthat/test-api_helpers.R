@@ -146,5 +146,8 @@ test_that("api_calls dispatches correctly based on vector-length branching", {
 
   # Case: no vectors -> single api_call
   res_single <- api_calls("gemeindenhist", jahr = 2024)
-  expect_equal(res_single, list(endpoint = "gemeindenhist", jahr = 2024, code = NULL, name = NULL))
+  expect_equal(
+    res_single,
+    list(endpoint = "gemeindenhist", jahr = 2024, code = NULL, name = NULL)
+  )
 })
