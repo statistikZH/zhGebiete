@@ -11,7 +11,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 Das R-Paket `zhGebiete` bietet Nutzenden benutzerfreundliche und
 standardisierte Abfragen der
-[Gebietsstammdaten-API](https://gebietsstammdaten.statistik.zh.ch/api/__docs__/#/)
+[Gebietsstammdaten-API](https://gebietsstammdaten.statistik.zh.ch)
 aus R.
 
 Die API ermöglicht den einfachen Zugriff auf aktuelle und
