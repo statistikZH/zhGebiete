@@ -41,6 +41,9 @@ get_gebietstypen <- function() {
 #'
 #' @description Ermöglicht das Laden aller Gemeinden mit oder ohne Filter.
 #'
+#' @param auswahl Boolean, welcher beschreibt, ob eine Auswahl über die gefundenen
+#' Namen gemacht werden soll oder nicht. Verwendungszweck: beim Harmonisieren
+#' von Namen.
 #' @param ... Unten gelistete Filterargumente:
 #' @param gemeinde_code Filter nach Gemeindecode. Muss eine ganze positive Zahl
 #' sein. Ein Vektor aus verschiedenen Gemeindecodes ist ebenfalls zulässig.
@@ -63,12 +66,17 @@ get_gebietstypen <- function() {
 #' get_gemeinden(gemeinde_code = c(111:120))
 #'
 #' # Filtern nach einem oder mehreren Namen
-#' get_gemeinden(gemeinde_name = "am Albis")
+#' get_gemeinden(auswahl = TRUE, gemeinde_name = "am Albis")
 #' get_gemeinden(gemeinde_name = c("am Albis", "Züri"))
 #' }
 #'
 #' @export
-get_gemeinden <- function(..., gemeinde_code = NULL, gemeinde_name = NULL) {
+get_gemeinden <- function(
+  auswahl = FALSE,
+  ...,
+  gemeinde_code = NULL,
+  gemeinde_name = NULL
+) {
   # Error handling
   rlang::check_dots_empty()
   check_input_param(code = gemeinde_code, name = gemeinde_name)
@@ -81,7 +89,7 @@ get_gemeinden <- function(..., gemeinde_code = NULL, gemeinde_name = NULL) {
 
   # Select one name
   if (!is.null(gemeinde_name)) {
-    gemeinde_list <- select_name(list = gemeinde_list)
+    gemeinde_list <- select_name(list = gemeinde_list, selection = auswahl)
   }
   # Parse into data frame
   return(parse_to_df(list = gemeinde_list))
@@ -130,6 +138,9 @@ get_gemeindezuweisungen <- function(..., gemeinde_code = NULL) {
 #'
 #' @description Ermöglicht das Laden aller Bezirke mit oder ohne Filter.
 #'
+#' @param auswahl Boolean, welcher beschreibt, ob eine Auswahl über die gefundenen
+#' Namen gemacht werden soll oder nicht. Verwendungszweck: beim Harmonisieren
+#' von Namen.
 #' @param ... Unten gelistete Filterargumente:
 #' @param bezirk_code Filter nach Bezirkcode. Muss eine ganze positive Zahl sein.
 #' Ein Vektor aus verschiedenen Bezirkcodes ist ebenfalls zulässig.
@@ -157,7 +168,12 @@ get_gemeindezuweisungen <- function(..., gemeinde_code = NULL) {
 #' (BFS-Nummer) und Offizieller Name des Bezirks (BFS-Name).
 #'
 #' @export
-get_bezirke <- function(..., bezirk_code = NULL, bezirk_name = NULL) {
+get_bezirke <- function(
+  auswahl = FALSE,
+  ...,
+  bezirk_code = NULL,
+  bezirk_name = NULL
+) {
   # Error handling
   rlang::check_dots_empty()
   check_input_param(code = bezirk_code, name = bezirk_name)
@@ -170,7 +186,7 @@ get_bezirke <- function(..., bezirk_code = NULL, bezirk_name = NULL) {
 
   # Select one name
   if (!is.null(bezirk_name)) {
-    bezirk_list <- select_name(list = bezirk_list)
+    bezirk_list <- select_name(list = bezirk_list, selection = auswahl)
   }
 
   # Remove "gemeinden" for filters
@@ -188,10 +204,13 @@ get_bezirke <- function(..., bezirk_code = NULL, bezirk_name = NULL) {
 #' @description Ermöglicht das Laden aller Raumplanungsregionen mit oder ohne
 #' Filter.
 #'
+#' @param auswahl Boolean, welcher beschreibt, ob eine Auswahl über die gefundenen
+#' Namen gemacht werden soll oder nicht. Verwendungszweck: beim Harmonisieren
+#' von Namen.
 #' @param ... Unten gelistete Filterargumente:
 #' @param raumplanungsregion_code Filter nach Raumplanungsregioncode. Muss eine
-#'  ganze positive Zahl sein. Ein Vektor aus verschiedenen
-#'  Raumplanungsregioncodes ist ebenfalls zulässig.
+#' ganze positive Zahl sein. Ein Vektor aus verschiedenen
+#' Raumplanungsregioncodes ist ebenfalls zulässig.
 #' @param raumplanungsregion_name Filter nach Rraumplanungsregion Name. Muss
 #' vom Typ `character` sein. Ein Vektor aus verschiedenen Raumplanungsregion
 #' Namen ist ebenfalls zulässig.
@@ -215,12 +234,13 @@ get_bezirke <- function(..., bezirk_code = NULL, bezirk_name = NULL) {
 #' get_raumplanungsregionen(raumplanungsregion_code = c(101:103))
 #'
 #' # Filtern nach einem oder mehreren Namen
-#' get_raumplanungsregionen(raumplanungsregion_name = "tal")
+#' get_raumplanungsregionen(auswahl = TRUE, raumplanungsregion_name = "tal")
 #' get_raumplanungsregionen(raumplanungsregion_name = c("tal", "Züri"))
 #' }
 #'
 #' @export
 get_raumplanungsregionen <- function(
+  auswahl = FALSE,
   ...,
   raumplanungsregion_code = NULL,
   raumplanungsregion_name = NULL
@@ -240,7 +260,10 @@ get_raumplanungsregionen <- function(
 
   # Select one name
   if (!is.null(raumplanungsregion_name)) {
-    raumplanungsregionen_list <- select_name(list = raumplanungsregionen_list)
+    raumplanungsregionen_list <- select_name(
+      list = raumplanungsregionen_list,
+      selection = auswahl
+    )
   }
 
   # Remove "gemeinden" for filters

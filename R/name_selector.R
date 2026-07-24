@@ -5,23 +5,26 @@
 #' ein Namen auswäaelen.
 #'
 #' @param list Eine aus einer API-Abfrage stammende Liste.
+#' @param selection Boolean, welcher beschreibt, ob eine Auswahl über die gefundenen
+#' Namen gemacht werden soll oder nicht. Verwendungszweck: beim Harmonisieren
+#' von Namen.
 #'
 #' @returns Trefferliste mit dem ausgewählten Namen und ohne den Suchnamen.
 #'
 #' @keywords internal
 
-select_name <- function(list) {
+select_name <- function(list, selection) {
   # In case the list has names
   if (is.null(names(list))) {
     # Recursive call
-    list_selected <- lapply(list, \(l) select_name(list = l))
+    list_selected <- lapply(list, \(l) select_name(list = l, selection))
   } else {
     # Error handling
     if (length(list$treffer) == 0) {
       stop("Eine Filteroption liefert keinen treffer.", call. = FALSE)
     }
     # Find out if there are multiple matches
-    if (length(list$treffer[[1]]) > 1) {
+    if (length(list$treffer[[1]]) > 1 & selection) {
       # Print selection criteria to console
       cat(paste0(
         "Die Folgenden Treffer wurden erzielt bei der suche nach \"",
