@@ -23,7 +23,7 @@ select_name <- function(list) {
     # Find out if there are multiple matches
     if (length(list$treffer[[1]]) > 1) {
       # Print selection criteria to console
-      cat("Die Folgenden Treffer wurden erzielt:\n")
+      cat(paste0("Die Folgenden Treffer wurden erzielt bei der suche nach \"", list$name, "\":\n"))
 
       # Ensure a nice print out
       list$treffer$gemeinden <- NULL
