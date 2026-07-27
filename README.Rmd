@@ -69,7 +69,7 @@ test_daten <- data.frame(
 # Gemeinde Namen Harmonisieren
 test_harmonized <- bind_cols(
   "validieren" = test_daten$validieren,
-  get_gemeinden(gemeinde_name = test_daten$validieren)
+  get_gemeinden(auswahl = TRUE, gemeinde_name = test_daten$validieren)
 ) |>
   select(validieren, gemeinde_name, gemeinde_code)
 
@@ -111,8 +111,8 @@ get_gemeinden(gemeinde_code = 111)
 get_bezirke(bezirk_code = c(101, 104, 112))
 get_raumplanungsregionen(raumplanungsregion_code = c(104:110))
 
-# Filtern nach einem oder mehreren Namen
-get_gemeinden(gemeinde_name = "am Albis")
+# Filtern nach einem oder mehreren Namen mit oder ohne Auswahl
+get_gemeinden(auswahl = TRUE, gemeinde_name = "am Albis")
 get_bezirke(bezirk_name = c("Horgn", "Züri"))
 ```
 

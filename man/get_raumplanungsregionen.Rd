@@ -5,12 +5,17 @@
 \title{Raumplanungsregionen abrufen}
 \usage{
 get_raumplanungsregionen(
+  auswahl = FALSE,
   ...,
   raumplanungsregion_code = NULL,
   raumplanungsregion_name = NULL
 )
 }
 \arguments{
+\item{auswahl}{Boolean, welcher beschreibt, ob eine Auswahl über die gefundenen
+Namen gemacht werden soll oder nicht. Verwendungszweck: beim Harmonisieren
+von Namen.}
+
 \item{...}{Unten gelistete Filterargumente:}
 
 \item{raumplanungsregion_code}{Filter nach Raumplanungsregioncode. Muss eine
@@ -47,7 +52,7 @@ get_raumplanungsregionen(raumplanungsregion_code = c(101, 103))
 get_raumplanungsregionen(raumplanungsregion_code = c(101:103))
 
 # Filtern nach einem oder mehreren Namen
-get_raumplanungsregionen(raumplanungsregion_name = "tal")
+get_raumplanungsregionen(auswahl = TRUE, raumplanungsregion_name = "tal")
 get_raumplanungsregionen(raumplanungsregion_name = c("tal", "Züri"))
 }
 

@@ -19,17 +19,17 @@ test_that("test functionality of select_name", {
   }
 
   # Mock the console input
-  result_1 <- select_name(list = data_1)
+  result_1 <- select_name(list = data_1, selection = TRUE)
   capture_output(
     result_2 <- with_mocked_bindings(
-      select_name(list = data_2),
+      select_name(list = data_2, selection = TRUE),
       readline = make_reader(c(NA, "0", "99", "", "1")),
       .package = "base"
     )
   )
   capture_output(
     result_3 <- with_mocked_bindings(
-      select_name(list = nested_data),
+      select_name(list = nested_data, selection = TRUE),
       readline = make_reader(c(NA, "0", "99", "", "1")),
       .package = "base"
     )

@@ -4,9 +4,13 @@
 \alias{get_bezirke}
 \title{Bezirke abrufen}
 \usage{
-get_bezirke(..., bezirk_code = NULL, bezirk_name = NULL)
+get_bezirke(auswahl = FALSE, ..., bezirk_code = NULL, bezirk_name = NULL)
 }
 \arguments{
+\item{auswahl}{Boolean, welcher beschreibt, ob eine Auswahl über die gefundenen
+Namen gemacht werden soll oder nicht. Verwendungszweck: beim Harmonisieren
+von Namen.}
+
 \item{...}{Unten gelistete Filterargumente:}
 
 \item{bezirk_code}{Filter nach Bezirkcode. Muss eine ganze positive Zahl sein.

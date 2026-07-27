@@ -1,7 +1,7 @@
 Package: zhGebiete
 Type: Package
 Title: Package for accessing the Gebietsstammdaten API of the Canton of Zürich
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person(
       "Livio", "Bätscher",

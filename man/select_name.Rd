@@ -4,10 +4,14 @@
 \alias{select_name}
 \title{Namen bei Mehrfachtreffern auswaehlen}
 \usage{
-select_name(list)
+select_name(list, selection)
 }
 \arguments{
 \item{list}{Eine aus einer API-Abfrage stammende Liste.}
+
+\item{selection}{Boolean, welcher beschreibt, ob eine Auswahl über die gefundenen
+Namen gemacht werden soll oder nicht. Verwendungszweck: beim Harmonisieren
+von Namen.}
 }
 \value{
 Trefferliste mit dem ausgewählten Namen und ohne den Suchnamen.

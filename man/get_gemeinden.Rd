@@ -4,9 +4,13 @@
 \alias{get_gemeinden}
 \title{Gemeinden abrufen}
 \usage{
-get_gemeinden(..., gemeinde_code = NULL, gemeinde_name = NULL)
+get_gemeinden(auswahl = FALSE, ..., gemeinde_code = NULL, gemeinde_name = NULL)
 }
 \arguments{
+\item{auswahl}{Boolean, welcher beschreibt, ob eine Auswahl über die gefundenen
+Namen gemacht werden soll oder nicht. Verwendungszweck: beim Harmonisieren
+von Namen.}
+
 \item{...}{Unten gelistete Filterargumente:}
 
 \item{gemeinde_code}{Filter nach Gemeindecode. Muss eine ganze positive Zahl
@@ -38,7 +42,7 @@ get_gemeinden(gemeinde_code = c(111, 112))
 get_gemeinden(gemeinde_code = c(111:120))
 
 # Filtern nach einem oder mehreren Namen
-get_gemeinden(gemeinde_name = "am Albis")
+get_gemeinden(auswahl = TRUE, gemeinde_name = "am Albis")
 get_gemeinden(gemeinde_name = c("am Albis", "Züri"))
 }
 
