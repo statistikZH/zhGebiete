@@ -6,7 +6,7 @@
 #'
 #' @keywords internal
 get_base_URL <- function() {
-  return("https://rstudio.ji.ktzh.ch/new/prod/s/0d49df02a1898e962ee85/?launcher=1&view=plumber")
+  return("https://rstudio.ji.ktzh.ch/new/prod/s/0d49df02a1898e962ee85/p/c88286c8/")
 }
 
 #' Request-Objekt erstellen
