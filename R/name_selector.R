@@ -14,52 +14,39 @@
 #' @keywords internal
 
 select_name <- function(list, selection) {
-  # In case the list has names
   if (is.null(names(list))) {
-    # Recursive call
     list_selected <- lapply(list, \(l) select_name(list = l, selection))
   } else {
-    # Error handling
-    if (length(list$treffer) == 0) {
-      stop("Eine Filteroption liefert keinen treffer.", call. = FALSE)
+    # Identifiziere das Daten-Array (z.B. 'gemeinden', 'bezirke' etc.)
+    data_key <- names(list)[sapply(list, is.list)][1]
+    data_array <- list[[data_key]]
+
+    if (is.null(data_array) || length(data_array) == 0) {
+      stop("Eine Filteroption liefert keinen Treffer.", call. = FALSE)
     }
-    # Find out if there are multiple matches
-    if (length(list$treffer[[1]]) > 1 & selection) {
-      # Print selection criteria to console
-      cat(paste0(
-        "Die Folgenden Treffer wurden erzielt bei der suche nach \"",
-        list$name,
-        "\":\n"
-      ))
 
-      # Ensure a nice print out
-      list$treffer$gemeinden <- NULL
-      names(list$treffer) <- gsub(".*\\.", "", names(list$treffer))
+    if (length(data_array) > 1 && selection) {
+      cat(paste0("Mehrere Treffer gefunden. Bitte einen auswählen:\n"))
 
-      print(list$treffer)
+      # Vorschau der Treffer erstellen
+      preview <- do.call(rbind, lapply(data_array, function(x) {
+        # Nur Name und Code anzeigen
+        as.data.frame(x[grep("name|code", names(x))])
+      }))
+      print(preview)
       cat("------------------------------------------------------------\n")
 
-      # Get user feedback
-      selected_value <- suppressWarnings(as.integer(readline(
-        prompt = "Bitte einen Treffer waehlen: "
-      )))
+      selected_value <- suppressWarnings(as.integer(readline(prompt = "Index wählen: ")))
 
-      # Error handling for invalid entries
-      while (
-        is.na(selected_value) |
-          (selected_value < 1) |
-          (selected_value > length(list$treffer[[1]]))
-      ) {
-        selected_value <- suppressWarnings(as.integer(readline(
-          prompt = "Bitte einene Zahl eingeben welche geht: "
-        )))
+      while (is.na(selected_value) || (selected_value < 1) || (selected_value > length(data_array))) {
+        selected_value <- suppressWarnings(as.integer(readline(prompt = "Ungültige Eingabe. Bitte Zahl wählen: ")))
       }
 
-      # Perform the selection
-      list_selected <- list$treffer[selected_value, ]
+      # Nur das ausgewählte Element als Liste zurückgeben, damit parse_to_df funktioniert
+      return(setNames(list(data_array[[selected_value]]), data_key))
     } else {
-      # Case that there is only one or no match
-      list_selected <- list$treffer # Assign the "treffer" list
+      # Nur ein Treffer oder keine Auswahl gewünscht -> das ganze Array zurückgeben
+      return(list)
     }
   }
   return(list_selected)
