@@ -12,9 +12,7 @@
 #'
 #' @export
 get_gebiete <- function() {
-  # API call
-  gebiete_list <- api_call(endpoint = "gebiete")
-  # Parse into data frame
+  gebiete_list <- api_calls(endpoint = "gebiete")
   return(parse_to_df(list = gebiete_list))
 }
 
@@ -31,9 +29,7 @@ get_gebiete <- function() {
 #'
 #' @export
 get_gebietstypen <- function() {
-  # API call
-  gebietstypen_list <- api_call(endpoint = "gebietstypen")
-  # Parse into data frame
+  gebietstypen_list <- api_calls(endpoint = "gebietstypen")
   return(parse_to_df(list = gebietstypen_list))
 }
 
@@ -72,26 +68,24 @@ get_gebietstypen <- function() {
 #'
 #' @export
 get_gemeinden <- function(
-  auswahl = FALSE,
-  ...,
-  gemeinde_code = NULL,
-  gemeinde_name = NULL
+    auswahl = FALSE,
+    ...,
+    gemeinde_code = NULL,
+    gemeinde_name = NULL
 ) {
-  # Error handling
   rlang::check_dots_empty()
   check_input_param(code = gemeinde_code, name = gemeinde_name)
-  # API call
+
   gemeinde_list <- api_calls(
     endpoint = "gemeinden",
     code = gemeinde_code,
     name = gemeinde_name
   )
 
-  # Select one name
   if (!is.null(gemeinde_name)) {
     gemeinde_list <- select_name(list = gemeinde_list, selection = auswahl)
   }
-  # Parse into data frame
+
   return(parse_to_df(list = gemeinde_list))
 }
 
@@ -107,7 +101,7 @@ get_gemeinden <- function(
 #' @return Dataframe mit offiziellem Code der Gemeinde (BFS-Nummer),
 #' offiziellem Namen der Gemeinde (BFS-Name), offiziellem Code des Bezirks
 #' (BFS-Nummer), offiziellem Name des Bezirks (BFS-Name), offiziellem Code der
-#' Raumplanungsregion (Vergabe durch ARE/Kantone) und offiziellem Name der
+#' Raumplanungsregion (Vergabe durch ARE/Kantone) und offiziellem Namen der
 #' Raumplanungsregion (Vergabe durch ARE/Kantone).
 #'
 #' @examples \dontrun{
@@ -121,16 +115,14 @@ get_gemeinden <- function(
 #'
 #' @export
 get_gemeindezuweisungen <- function(..., gemeinde_code = NULL) {
-  # Error handling
   rlang::check_dots_empty()
   check_input_param(code = gemeinde_code)
-  # API call
+
   gemeindezuweisungen_list <- api_calls(
     endpoint = "gemeindezuweisungen",
     code = gemeinde_code
   )
 
-  # Parse into data frame
   return(parse_to_df(list = gemeindezuweisungen_list))
 }
 
@@ -169,34 +161,27 @@ get_gemeindezuweisungen <- function(..., gemeinde_code = NULL) {
 #'
 #' @export
 get_bezirke <- function(
-  auswahl = FALSE,
-  ...,
-  bezirk_code = NULL,
-  bezirk_name = NULL
+    auswahl = FALSE,
+    ...,
+    bezirk_code = NULL,
+    bezirk_name = NULL
 ) {
-  # Error handling
   rlang::check_dots_empty()
   check_input_param(code = bezirk_code, name = bezirk_name)
-  # API call
+
   bezirk_list <- api_calls(
     endpoint = "bezirke",
     code = bezirk_code,
     name = bezirk_name
   )
 
-  # Select one name
   if (!is.null(bezirk_name)) {
     bezirk_list <- select_name(list = bezirk_list, selection = auswahl)
   }
 
-  # Remove "gemeinden" for filters
-  short_bezirk_list <- remove_gemeinden(list = bezirk_list)
-  # Parse into data frame
-  bezirk_df <- parse_to_df(list = short_bezirk_list)
-  # Remove  "gemeinden" with no filter
-  bezirk_df$gemeinden <- NULL
+  bezirk_list <- remove_gemeinden(list = bezirk_list)
 
-  return(bezirk_df)
+  return(parse_to_df(list = bezirk_list))
 }
 
 #' Raumplanungsregionen abrufen
@@ -240,25 +225,23 @@ get_bezirke <- function(
 #'
 #' @export
 get_raumplanungsregionen <- function(
-  auswahl = FALSE,
-  ...,
-  raumplanungsregion_code = NULL,
-  raumplanungsregion_name = NULL
+    auswahl = FALSE,
+    ...,
+    raumplanungsregion_code = NULL,
+    raumplanungsregion_name = NULL
 ) {
-  # Error handling
   rlang::check_dots_empty()
   check_input_param(
     code = raumplanungsregion_code,
     name = raumplanungsregion_name
   )
-  # API call
+
   raumplanungsregionen_list <- api_calls(
     endpoint = "raumplanungsregionen",
     code = raumplanungsregion_code,
     name = raumplanungsregion_name
   )
 
-  # Select one name
   if (!is.null(raumplanungsregion_name)) {
     raumplanungsregionen_list <- select_name(
       list = raumplanungsregionen_list,
@@ -266,16 +249,11 @@ get_raumplanungsregionen <- function(
     )
   }
 
-  # Remove "gemeinden" for filters
-  short_raumplanungsregionen_list <- remove_gemeinden(
+  raumplanungsregionen_list <- remove_gemeinden(
     list = raumplanungsregionen_list
   )
-  # Parse into data frame
-  raumplanungsregionen_df <- parse_to_df(list = short_raumplanungsregionen_list)
-  # Remove  "gemeinden" with no filter
-  raumplanungsregionen_df$gemeinden <- NULL
 
-  return(raumplanungsregionen_df)
+  return(parse_to_df(list = raumplanungsregionen_list))
 }
 
 #' Alle Gemeindemutationen abrufen
@@ -292,9 +270,7 @@ get_raumplanungsregionen <- function(
 #'
 #' @export
 get_gemeindemutationen <- function() {
-  # API call
-  gemeindemutationen_list <- api_call(endpoint = "gemeindemutationen")
-  # Parse into data frame
+  gemeindemutationen_list <- api_calls(endpoint = "gemeindemutationen")
   return(parse_to_df(list = gemeindemutationen_list))
 }
 
@@ -334,36 +310,21 @@ get_gemeindemutationen <- function() {
 #' }
 #'
 #' @export
-
 get_gemeindenhist <- function(
-  ...,
-  jahr = NULL,
-  gemeinde_code = NULL
+    ...,
+    jahr = NULL,
+    gemeinde_code = NULL
 ) {
-  # Error handling
   rlang::check_dots_empty()
   check_input_param(jahr = jahr, code = gemeinde_code)
-  # API call
+
   gemeindehist_list <- api_calls(
     endpoint = "gemeindenhist",
     jahr = jahr,
     code = gemeinde_code
   )
 
-  # Parse into data frame
-  gemeindehist_df <- parse_to_df(list = gemeindehist_list)
-
-  # Remove unwanted parameters
-  if (names(gemeindehist_df[1]) == "gemeinde_code") {
-    gemeindehist_df <- gemeindehist_df[-1]
-  }
-  if (names(gemeindehist_df[1]) == "jahr") {
-    gemeindehist_df <- gemeindehist_df[-1]
-  }
-  # Standardize the names
-  names(gemeindehist_df) <- gsub("\\.1", "", names(gemeindehist_df))
-
-  return(gemeindehist_df)
+  return(parse_to_df(list = gemeindehist_list))
 }
 
 #' Health-Check der API
@@ -384,8 +345,6 @@ get_gemeindenhist <- function(
 #'
 #' @export
 get_health <- function() {
-  # API call
-  health_list <- api_call(endpoint = "health")
-  # No parsing needed
-  return(health_list)
+  health_list <- api_calls(endpoint = "health")
+  return(parse_to_df(list = health_list))
 }
