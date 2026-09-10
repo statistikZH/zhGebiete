@@ -6,7 +6,7 @@
 #'
 #' @keywords internal
 get_base_URL <- function() {
-  return("https://gebietsstammdaten.statistik.zh.ch/api")
+  return("https://stammdaten-test.h.srvs.ch/api")
 }
 
 #' Request-Objekt erstellen
