@@ -60,15 +60,15 @@ test_that("test the functionality of remove_gemeinden", {
 
   # Test if "gemeinden" is removed and rest is as it should be
   expect_type(result_1, "list")
-  expect_all_true(is.null(result_1$gemeinden))
+  expect_true(is.null(result_1$gemeinden))
   expect_equal(length(result_1), 1)
   expect_equal(result_1$bezirk$gebietstyp_code, 2)
   expect_equal(result_1$bezirk$bezirk_code, 111)
   expect_equal(result_1$bezirk$bezirk_name, "Dietikon")
 
   expect_type(result_2, "list")
-  expect_all_true(is.null(result_2[[1]]$gemeinden))
-  expect_all_true(is.null(result_2[[1]]$gemeinden))
+  expect_true(is.null(result_2[[1]]$gemeinden))
+  expect_true(is.null(result_2[[1]]$gemeinden))
   expect_equal(length(result_2[[1]]), 1)
   expect_equal(length(result_2[[2]]), 1)
   expect_equal(result_2[[1]]$bezirk$gebietstyp_code, 2)
