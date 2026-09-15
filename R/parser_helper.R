@@ -1,8 +1,6 @@
 #' Data frame Parser
 #'
 #' @description Konvertiert eine Liste aus einer API-Abfrage in einen Datenframe.
-#' Die Funktion erkennt automatisch die API-Struktur (Wrapper-Objekt)
-#' und extrahiert das entsprechende Daten-Array.
 #'
 #' @param list Eine aus einer API-Abfrage stammende Liste.
 #'
@@ -11,51 +9,46 @@
 #' @keywords internal
 parse_to_df <- function(list) {
 
-  # 1. Prüfung, ob die Liste verschachtelt ist (z.B. Ergebnis von api_calls lapply)
+  # 1. Rekursion für verschachtelte Listen (z.B. von api_calls)
   if (is.null(names(list))) {
-    # Rekursiver Aufruf
     tryCatch(
       {
         do.call(rbind, lapply(list, \(l) parse_to_df(list = l)))
       },
       error = function(e) {
-        stop("Eine Filteroption liefert keinen Treffer.", call. = FALSE)
+        stop("Die Filteroption liefert keinen Treffer.", call. = FALSE)
       }
     )
   } else {
-    # 2. Extraktion des Daten-Arrays aus dem Wrapper
-    # Die API gibt Daten in einem Array zurück (z.B. { "gemeinden": [...] }).
-    # Wir suchen nach dem Element, das eine Liste ist und selbst Namen besitzt (die Datenzeilen).
-    data_element <- NULL
-    for (name in names(list)) {
-      if (is.list(list[[name]]) && !is.null(names(list[[name]]))) {
-        data_element <- list[[name]]
-        break
-      }
-    }
+    # 2. Extraktion des Daten-Arrays
+    # Wir nehmen das erste Element, das eine Liste oder ein Dataframe ist (z.B. 'gemeinden')
+    data_key <- names(list)[sapply(list, function(x) is.list(x) || is.data.frame(x))][1]
 
-    if (is.null(data_element)) {
-      # Fallback: Wenn kein Array gefunden wurde, versuche das Objekt direkt zu konvertieren
+    if (is.null(data_key)) {
+      # Fallback, falls die Struktur unerwartet ist
       df <- as.data.frame(list, stringsAsFactors = FALSE)
     } else {
-      # Konvertiere das gefundene Array (Liste von Objekten) in einen Dataframe
-      if (length(data_element) == 0) {
-        stop("Keine Daten im Response-Array gefunden.", call. = FALSE)
-      }
+      data_element <- list[[data_key]]
 
-      # Alle Listenelemente zu einem Dataframe zusammenführen
-      df <- do.call(rbind, lapply(data_element, function(x) {
-        as.data.frame(x, stringsAsFactors = FALSE)
-      }))
+      # Da die API immer eine Liste/Array liefert, konvertieren wir sie direkt
+      if (is.data.frame(data_element)) {
+        df <- data_element
+      } else {
+        df <- do.call(rbind, lapply(data_element, function(x) {
+          as.data.frame(x, stringsAsFactors = FALSE)
+        }))
+      }
     }
 
-    # 3. Spaltennamen korrigieren
-    # Entfernt Präfixe aus den Namen (z.B. "gemeinde.name" -> "name")
-    names(df) <- gsub(".*\\.", "", names(df))
+    # 3. Spaltennamen korrigieren (Präfixe entfernen)
+    if (!is.null(names(df))) {
+      names(df) <- gsub(".*\\.", "", names(df))
+    }
 
     return(df)
   }
 }
+
 
 #' Entferne "Gemeinden"-Liste
 #'
@@ -65,19 +58,40 @@ parse_to_df <- function(list) {
 #'
 #' @param list Eine aus einer API-Abfrage stammende Liste.
 #'
-#' @returns Die Eingabeliste ohne das Element "gemeinden".
+#' @returns Die Eingabeliste ohne das Element/die Spalte "gemeinden".
 #'
 #' @keywords internal
 remove_gemeinden <- function(list) {
-  # Prüfung, ob die Liste verschachtelt ist
-  if (is.null(names(list))) {
-    # Rekursiver Aufruf
-    list <- lapply(list, \(l) remove_gemeinden(list = l))
-  } else {
-    # Entferne das Element "gemeinden", falls vorhanden
+  # Basisfall: kein Listen-Objekt (z.B. ein einzelner skalarer Wert) -> nichts zu tun
+  if (!is.list(list)) {
+    return(list)
+  }
+
+  # Fall: data.frame (z.B. das "bezirke"-Element nach der jsonlite-Simplifizierung,
+  # wo "gemeinden" als Listen-Spalte auftaucht statt als normales Listenelement)
+  if (is.data.frame(list)) {
     if ("gemeinden" %in% names(list)) {
       list$gemeinden <- NULL
     }
+    # Übrige Spalten rekursiv weiter durchsuchen (falls noch tiefer verschachtelt)
+    list[] <- lapply(list, remove_gemeinden)
+    return(list)
   }
+
+  # Fall: unbenannte (verschachtelte) Liste, z.B. Ergebnis mehrerer api_calls()
+  # (jahr-, code- oder name-Vektor) -> rekursiv über die einzelnen Elemente
+  if (is.null(names(list))) {
+    return(lapply(list, remove_gemeinden))
+  }
+
+  # Fall: benannte Liste (Wrapper-Objekt einer Region/eines Bezirks)
+  if ("gemeinden" %in% names(list)) {
+    list$gemeinden <- NULL
+  }
+
+  # Restliche Elemente rekursiv weiter durchsuchen (z.B. "bezirke", das selbst
+  # wieder ein data.frame mit "gemeinden"-Spalte sein kann)
+  list <- lapply(list, remove_gemeinden)
+
   return(list)
 }
