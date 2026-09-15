@@ -345,6 +345,5 @@ get_gemeindenhist <- function(
 #'
 #' @export
 get_health <- function() {
-  health_list <- api_calls(endpoint = "health")
-  return(parse_to_df(list = health_list))
+  return(api_calls(endpoint = "health"))
 }
