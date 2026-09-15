@@ -28,7 +28,7 @@ generate_api_request <- function(endpoint, ...) {
     # Strict header format handling
     httr2::req_headers(Accept = "application/json") |>
     # Visualize the error handling
-    httr2::req_error(is_error = \(resp) httr2::resp_status(resp) >= 400) |>
+    httr2::req_error(is_error = \(resp) httr2::resp_status(resp) >= 500) |>
     # Define retry and delay with an exponential growth (2, 4, 8, 16, 32 sec)
     httr2::req_retry(max_tries = 5, backoff = \(tries) 2^tries)
 
@@ -45,9 +45,23 @@ generate_api_request <- function(endpoint, ...) {
 #'
 #' @keywords internal
 call_and_parse <- function(request) {
-  call <- httr2::req_perform(req = request) |>
-    httr2::resp_body_json(simplifyVector = TRUE, flatten = TRUE)
-  return(call)
+  resp <- httr2::req_perform(req = request)
+  status <- httr2::resp_status(resp)
+  if (status >= 400) {
+    # Fehlermeldung aus dem JSON-Body zu lesen
+    body <- tryCatch(
+      httr2::resp_body_json(resp),
+      error = function(e) NULL
+    )
+    err_msg <- if (!is.null(body$error)) {
+      body$error
+    } else {
+      paste("API Error", status)
+    }
+
+    stop(err_msg, call. = FALSE)
+  }
+  return(httr2::resp_body_json(resp, simplifyVector = TRUE, flatten = TRUE))
 }
 
 #' Fehler abfangen
