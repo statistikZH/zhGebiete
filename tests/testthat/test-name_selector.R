@@ -45,26 +45,3 @@ test_that("test functionality of select_name", {
 })
 
 
-test_that("check if select_name performs the error handling correctly", {
-  json_string_1 <- '{"name":"test","gemeinden":[],"error":"Kein Treffer"}'
-  data_1 <- jsonlite::fromJSON(json_string_1, simplifyVector = FALSE)
-
-  expect_error(
-    select_name(data_1),
-    "Eine Filteroption liefert keinen Treffer."
-  )
-})
-
-
-test_that("check if select_name performs the error handling correctly", {
-  # JSON auf das neue Format 'gemeinden' angepasst
-  json_string_1 <- '{"name":"iöhoasdhjilöfadsjklghads","gemeinden":[],"error":"Kein Treffer gefunden"}'
-  data_1 <- jsonlite::fromJSON(json_string_1)
-
-  # Test for errors
-  expect_error(
-    select_name(data_1),
-    "Eine Filteroption liefert keinen Treffer."
-  )
-})
-

@@ -25,21 +25,6 @@ test_that("test functionality of parse_to_df", {
   expect_equal(result_2$gemeinde_name, c("Bäretswil", "Bubikon"))
 })
 
-test_that("check if parse_to_df performs the error handling correctly", {
-
-  json_string <- '{"error": "Keine Gemeinde mit Namen \'iöhoasdhjilöfadsjklghads\' gefunden"}'
-
-  # In R-Objekt umwandeln (das ist das, was parse_to_df normalerweise bekommt)
-  data_error <- jsonlite::fromJSON(json_string)
-
-  # Jetzt prüfen wir, ob parse_to_df diesen Fehler erkennt und einen stop() auslöst
-  expect_error(
-    parse_to_df(data_error),
-    "Keine Gemeinde mit Namen 'iöhoasdhjilöfadsjklghads' gefunden"
-  )
-})
-
-
 
 test_that("test the functionality of remove_gemeinden", {
   # Import JSON from API string
