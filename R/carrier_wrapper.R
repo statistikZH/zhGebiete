@@ -86,11 +86,20 @@ get_gemeinden <- function(
   )
 
   if (!is.null(gemeinde_name)) {
-    gemeinde_list <- select_name(list = gemeinde_list, selection = auswahl)
+    # gemeinde_name als search_term übergeben
+    gemeinde_list <- select_name(list = gemeinde_list, selection = auswahl, search_term = gemeinde_name)
   }
 
-  return(parse_to_df(list = gemeinde_list))
+  df <- parse_to_df(list = gemeinde_list)
+
+  # NEU: Spalte gebietstyp_code aus dem Endergebnis entfernen
+  if ("gebietstyp_code" %in% names(df)) {
+    df$gebietstyp_code <- NULL
+  }
+
+  return(df)
 }
+
 
 #' Gemeindezuweisungen abrufen
 #'
