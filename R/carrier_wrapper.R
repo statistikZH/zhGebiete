@@ -13,7 +13,10 @@
 #' @export
 get_gebiete <- function() {
   gebiete_list <- api_calls(endpoint = "gebiete")
-  return(parse_to_df(list = gebiete_list))
+  df <- parse_to_df(list = gebiete_list)
+  # Sortierung: zuerst nach gebietstyp_code, dann nach gebiet_code
+  df <- df[order(df$gebietstyp_code, df$gebiet_code), ]
+  return(df)
 }
 
 #' Alle Gebietstypen abrufen
