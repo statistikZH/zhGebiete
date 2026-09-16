@@ -92,11 +92,6 @@ get_gemeinden <- function(
 
   df <- parse_to_df(list = gemeinde_list)
 
-  cols_to_remove <- c("eingabe")
-  if (!is.null(df)) {
-    df <- df[, !(names(df) %in% cols_to_remove), drop = FALSE]
-  }
-
   return(df)
 }
 
@@ -195,11 +190,6 @@ get_bezirke <- function(
 
   df <- parse_to_df(list = bezirk_list)
 
-  cols_to_remove <- c("eingabe")
-  if (!is.null(df)) {
-    df <- df[, !(names(df) %in% cols_to_remove), drop = FALSE]
-  }
-
   return(df)
 }
 
@@ -272,11 +262,6 @@ get_raumplanungsregionen <- function(
   )
 
   df <- parse_to_df(list = raumplanungsregionen_list)
-
-  cols_to_remove <- c("eingabe")
-  if (!is.null(df)) {
-    df <- df[, !(names(df) %in% cols_to_remove), drop = FALSE]
-  }
 
   return(df)
 }

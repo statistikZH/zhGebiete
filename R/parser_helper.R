@@ -21,7 +21,6 @@ parse_to_df <- function(list) {
       return(NULL)
     }
 
-    # --- ROBUSTE ZUSAMMENFÜHRUNG ---
     # Alle vorkommenden Spaltennamen über alle Dataframes hinweg sammeln
     all_cols <- unique(unlist(lapply(processed_list, names)))
 
