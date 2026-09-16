@@ -14,7 +14,7 @@
 get_gebiete <- function() {
   gebiete_list <- api_calls(endpoint = "gebiete")
   df <- parse_to_df(list = gebiete_list)
-  # Sortierung: zuerst nach gebietstyp_code, dann nach gebiet_code
+  # Sortierung
   df <- df[order(df$gebietstyp_code, df$gebiet_code), ]
   return(df)
 }
@@ -274,7 +274,12 @@ get_raumplanungsregionen <- function(
 #' @export
 get_gemeindemutationen <- function() {
   gemeindemutationen_list <- api_calls(endpoint = "gemeindemutationen")
-  return(parse_to_df(list = gemeindemutationen_list))
+  df <- parse_to_df(list = gemeindemutationen_list)
+
+  # Sortierung
+  df <- df[order(df$mutationsdatum, df$gemeinde_code_alt), ]
+
+  return(df)
 }
 
 #' Jahresstände von Gemeinden abrufen
