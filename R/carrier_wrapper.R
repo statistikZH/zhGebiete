@@ -92,9 +92,9 @@ get_gemeinden <- function(
 
   df <- parse_to_df(list = gemeinde_list)
 
-  # NEU: Spalte gebietstyp_code aus dem Endergebnis entfernen
-  if ("gebietstyp_code" %in% names(df)) {
-    df$gebietstyp_code <- NULL
+  cols_to_remove <- c("eingabe")
+  if (!is.null(df)) {
+    df <- df[, !(names(df) %in% cols_to_remove), drop = FALSE]
   }
 
   return(df)
@@ -188,12 +188,19 @@ get_bezirke <- function(
   )
 
   if (!is.null(bezirk_name)) {
-    bezirk_list <- select_name(list = bezirk_list, selection = auswahl)
+    bezirk_list <- select_name(list = bezirk_list, selection = auswahl,search_term = bezirk_name)
   }
 
   bezirk_list <- remove_gemeinden(list = bezirk_list)
 
-  return(parse_to_df(list = bezirk_list))
+  df <- parse_to_df(list = bezirk_list)
+
+  cols_to_remove <- c("eingabe")
+  if (!is.null(df)) {
+    df <- df[, !(names(df) %in% cols_to_remove), drop = FALSE]
+  }
+
+  return(df)
 }
 
 #' Raumplanungsregionen abrufen
@@ -257,15 +264,21 @@ get_raumplanungsregionen <- function(
   if (!is.null(raumplanungsregion_name)) {
     raumplanungsregionen_list <- select_name(
       list = raumplanungsregionen_list,
-      selection = auswahl
-    )
+      selection = auswahl, search_term = raumplanungsregion_name)
   }
 
   raumplanungsregionen_list <- remove_gemeinden(
     list = raumplanungsregionen_list
   )
 
-  return(parse_to_df(list = raumplanungsregionen_list))
+  df <- parse_to_df(list = raumplanungsregionen_list)
+
+  cols_to_remove <- c("eingabe")
+  if (!is.null(df)) {
+    df <- df[, !(names(df) %in% cols_to_remove), drop = FALSE]
+  }
+
+  return(df)
 }
 
 #' Alle Gemeindemutationen abrufen
