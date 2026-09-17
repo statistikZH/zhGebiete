@@ -11,7 +11,7 @@ test_that("get_gebiete works against the live Gebietsstammdaten API", {
     c("gebietstyp_code", "gebietstyp_name", "gebiet_code", "gebiet_name")
   )
   expect_equal(ncol(result), 4)
-  expect_all_true(nrow(result) > 0)
+  expect_true(nrow(result) > 0)
 })
 
 test_that("get_gebietstypen works against the live Gebietsstammdaten API", {
@@ -28,16 +28,22 @@ test_that("get_gemeindemutationen works against the live Gebietsstammdaten API",
   expect_equal(
     names(result),
     c(
+      "mutationsdatum",
       "mutationstyp",
       "gemeinde_code_alt",
       "gemeinde_name_alt",
       "gemeinde_code_neu",
       "gemeinde_name_neu",
-      "mutationsdatum"
+      "eltern_gebietstyp_code",
+      "eltern_gebietstyp_name",
+      "eltern_gebiet_code_alt",
+      "eltern_gebiet_name_alt",
+      "eltern_gebiet_code_neu",
+      "eltern_gebiet_name_neu"
     )
   )
-  expect_equal(ncol(result), 6)
-  expect_all_true(nrow(result) > 0)
+  expect_equal(ncol(result), 12)
+  expect_true(nrow(result) > 0)
 })
 
 test_that("get_gemeinden works against the live Gebietsstammdaten API", {
@@ -45,9 +51,9 @@ test_that("get_gemeinden works against the live Gebietsstammdaten API", {
   expect_s3_class(result, "data.frame")
   expect_equal(
     names(result),
-    c("gebietstyp_code", "gemeinde_code", "gemeinde_name")
+    c("gemeinde_code", "gemeinde_name")
   )
-  expect_equal(ncol(result), 3)
+  expect_equal(ncol(result), 2)
   expect_equal(nrow(result), 1)
 })
 
@@ -56,9 +62,9 @@ test_that("get_bezirke works against the live Gebietsstammdaten API", {
   expect_s3_class(result, "data.frame")
   expect_equal(
     names(result),
-    c("gebietstyp_code", "bezirk_code", "bezirk_name")
+    c("bezirk_code", "bezirk_name")
   )
-  expect_equal(ncol(result), 3)
+  expect_equal(ncol(result), 2)
   expect_equal(nrow(result), 1)
 })
 
@@ -67,9 +73,9 @@ test_that("get_raumplanungsregionen works against the live Gebietsstammdaten API
   expect_s3_class(result, "data.frame")
   expect_equal(
     names(result),
-    c("gebietstyp_code", "raumplanungsregion_code", "raumplanungsregion_name")
+    c("raumplanungsregion_code", "raumplanungsregion_name")
   )
-  expect_equal(ncol(result), 3)
+  expect_equal(ncol(result), 2)
   expect_equal(nrow(result), 1)
 })
 
@@ -79,7 +85,6 @@ test_that("get_gemeindezuweisungen works against the live Gebietsstammdaten API"
   expect_equal(
     names(result),
     c(
-      "gebietstyp_code",
       "gemeinde_code",
       "gemeinde_name",
       "bezirk_code",
@@ -88,22 +93,21 @@ test_that("get_gemeindezuweisungen works against the live Gebietsstammdaten API"
       "raumplanungsregion_name"
     )
   )
-  expect_equal(ncol(result), 7)
+  expect_equal(ncol(result), 6)
   expect_equal(nrow(result), 1)
 })
 
-test_that("gget_gemeindenhist works against the live Gebietsstammdaten API", {
+test_that("get_gemeindenhist works against the live Gebietsstammdaten API", {
   result <- get_gemeindenhist(jahr = 2025, gemeinde_code = 111)
   expect_s3_class(result, "data.frame")
   expect_equal(
     names(result),
     c(
-      "gebietstyp_code",
       "gemeinde_code",
       "gemeinde_name",
       "jahr"
     )
   )
-  expect_equal(ncol(result), 4)
+  expect_equal(ncol(result), 3)
   expect_equal(nrow(result), 1)
 })

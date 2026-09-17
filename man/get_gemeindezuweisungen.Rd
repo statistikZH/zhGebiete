@@ -16,7 +16,7 @@ sein. Ein Vektor aus verschiedenen Gemeindecodes ist ebenfalls zulässig.}
 Dataframe mit offiziellem Code der Gemeinde (BFS-Nummer),
 offiziellem Namen der Gemeinde (BFS-Name), offiziellem Code des Bezirks
 (BFS-Nummer), offiziellem Name des Bezirks (BFS-Name), offiziellem Code der
-Raumplanungsregion (Vergabe durch ARE/Kantone) und offiziellem Name der
+Raumplanungsregion (Vergabe durch ARE/Kantone) und offiziellem Namen der
 Raumplanungsregion (Vergabe durch ARE/Kantone).
 }
 \description{

@@ -1,12 +1,23 @@
 Package: zhGebiete
 Type: Package
 Title: Package for accessing the Gebietsstammdaten API of the Canton of Zürich
-Version: 0.1.1
+Version: 0.2.0
 Authors@R: c(
+    person(
+      "Andriu", "Cavelti",
+      email = "andriu.cavelti@zh.ch",
+      role = c("aut", "cre")
+    ),
+    person(
+      "Rebekka", "Plüss",
+      email = "rebekka.pluess@zh.ch",
+      role = c("aut"),
+      comment = c(ORCID = "0000-0002-5651-1171")
+    ),
     person(
       "Livio", "Bätscher",
       email = "livio_999@hotmail.com",
-      role = c("aut", "cre"),
+      role = c("aut"),
       comment = c(ORCID = "0000-0002-2989-930X")
     )
   )
@@ -27,3 +38,4 @@ Suggests:
     jsonlite,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+RoxygenNote: 7.3.1
