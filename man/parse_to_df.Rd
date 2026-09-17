@@ -10,9 +10,9 @@ parse_to_df(list)
 \item{list}{Eine aus einer API-Abfrage stammende Liste.}
 }
 \value{
-Daten frame.
+Ein Datenframe mit den geparsten Ergebnissen.
 }
 \description{
-Konvertiert eine Liste in einen Datenframe
+Konvertiert eine Liste aus einer API-Abfrage in einen Datenframe.
 }
 \keyword{internal}
