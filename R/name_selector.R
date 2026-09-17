@@ -44,7 +44,7 @@ select_name <- function(list, selection, search_term = NULL) {
       msg <- if (!is.null(search_term)) {
         sprintf("Die Folgenden Treffer wurden erzielt bei der Suche nach \"%s\":\n", search_term)
       } else {
-        "Mehrere Treffer gefunden. Bitte einen auswählen:\n"
+        "Mehrere Treffer gefunden. Bitte einen auswaehlen:\n"
       }
       cat(msg)
 
@@ -65,7 +65,7 @@ select_name <- function(list, selection, search_term = NULL) {
       selected_value <- suppressWarnings(as.integer(readline(prompt = "Bitte einen Treffer waehlen: ")))
 
       while (is.na(selected_value) || (selected_value < 1) || (selected_value > num_results)) {
-        selected_value <- suppressWarnings(as.integer(readline(prompt = "Ungültige Eingabe. Bitte Zahl wählen: ")))
+        selected_value <- suppressWarnings(as.integer(readline(prompt = "Ungueltige Eingabe. Bitte Zahl waehlen: ")))
       }
 
       if (is.data.frame(data_array)) {
@@ -74,7 +74,7 @@ select_name <- function(list, selection, search_term = NULL) {
         selected_item <- data_array[[selected_value]]
       }
 
-      return(setNames(list(list(selected_item)), data_key))
+      return(stats::setNames(list(list(selected_item)), data_key))
     } else {
       return(list)
     }
