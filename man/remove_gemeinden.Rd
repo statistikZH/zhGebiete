@@ -10,11 +10,11 @@ remove_gemeinden(list)
 \item{list}{Eine aus einer API-Abfrage stammende Liste.}
 }
 \value{
-Die Eingabeliste ohne das Element "Gemeinden".
+Die Eingabeliste ohne das Element/die Spalte "gemeinden".
 }
 \description{
 Bei den Bezirken und Raumplanungsregionen wird im API-Abruf eine
 Liste der zugehörigen Gemeinden zurückgegeben. Diese Liste wird mit dieser
-Funktion entfernt.
+Funktion entfernt, um die Erstellung eines sauberen Datenframes zu ermöglichen.
 }
 \keyword{internal}

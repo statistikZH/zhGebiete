@@ -1,66 +1,86 @@
 #' Namen bei Mehrfachtreffern auswaehlen
 #'
-#' @details Diese Funktion erlaubt es zu identifizieren, ob eine Suche nach
-#' Namen mehrere Treffer geliefert hat. Falls ja, muessen Nutzende via Konsole
-#' ein Namen auswäaelen.
-#'
 #' @param list Eine aus einer API-Abfrage stammende Liste.
-#' @param selection Boolean, welcher beschreibt, ob eine Auswahl über die gefundenen
-#' Namen gemacht werden soll oder nicht. Verwendungszweck: beim Harmonisieren
-#' von Namen.
+#' @param selection Boolean, ob eine Auswahl erfolgen soll.
+#' @param search_term Optional: Der verwendete Suchbegriff für die Ausgabe.
 #'
-#' @returns Trefferliste mit dem ausgewählten Namen und ohne den Suchnamen.
+#' @returns Trefferliste mit dem ausgewählten Namen im Original-Wrapper.
 #'
 #' @keywords internal
-
-select_name <- function(list, selection) {
-  # In case the list has names
+select_name <- function(list, selection, search_term = NULL) {
   if (is.null(names(list))) {
-    # Recursive call
-    list_selected <- lapply(list, \(l) select_name(list = l, selection))
-  } else {
-    # Error handling
-    if (length(list$treffer) == 0) {
-      stop("Eine Filteroption liefert keinen treffer.", call. = FALSE)
-    }
-    # Find out if there are multiple matches
-    if (length(list$treffer[[1]]) > 1 & selection) {
-      # Print selection criteria to console
-      cat(paste0(
-        "Die Folgenden Treffer wurden erzielt bei der suche nach \"",
-        list$name,
-        "\":\n"
+    # --- Paarweise Verarbeitung von Ergebnissen und Suchbegriffen ---
+    if (!is.null(search_term) && length(search_term) == length(list)) {
+      # Nutzen von Map, um jedes Ergebnis mit dem entsprechenden Suchbegriff zu koppeln
+      return(Map(
+        function(l, s) select_name(list = l, selection = selection, search_term = s),
+        list,
+        search_term
       ))
+    } else {
+      # Fallback für einzelne Suchbegriffe oder wenn kein Suchbegriff vorhanden ist
+      return(lapply(list, \(l) select_name(list = l, selection = selection, search_term = search_term)))
+    }
+  } else {
+    # Daten-Key identifizieren (z.B. 'gemeinden')
+    data_key <- names(list)[sapply(list, function(x) is.list(x) || is.data.frame(x))][1]
 
-      # Ensure a nice print out
-      list$treffer$gemeinden <- NULL
-      names(list$treffer) <- gsub(".*\\.", "", names(list$treffer))
+    if (is.null(data_key)) return(list)
 
-      print(list$treffer)
-      cat("------------------------------------------------------------\n")
+    data_array <- list[[data_key]]
 
-      # Get user feedback
-      selected_value <- suppressWarnings(as.integer(readline(
-        prompt = "Bitte einen Treffer waehlen: "
-      )))
+    # Sortierung nach Code
+    if (is.data.frame(data_array)) {
+      code_col <- grep("code", names(data_array), value = TRUE)[1]
+      if (!is.na(code_col)) {
+        data_array <- data_array[order(data_array[[code_col]]), ]
+        rownames(data_array) <- NULL
+      }
+    }
 
-      # Error handling for invalid entries
-      while (
-        is.na(selected_value) |
-          (selected_value < 1) |
-          (selected_value > length(list$treffer[[1]]))
-      ) {
-        selected_value <- suppressWarnings(as.integer(readline(
-          prompt = "Bitte einene Zahl eingeben welche geht: "
-        )))
+    num_results <- if (is.data.frame(data_array)) nrow(data_array) else length(data_array)
+
+    if (num_results > 1 && selection) {
+      msg <- if (!is.null(search_term)) {
+        sprintf("Die Folgenden Treffer wurden erzielt bei der Suche nach \"%s\":\n", search_term)
+      } else {
+        "Mehrere Treffer gefunden. Bitte einen auswaehlen:\n"
+      }
+      cat(msg)
+
+      # Vorschau:
+      if (is.data.frame(data_array)) {
+        cols <- grep("name|code", names(data_array), value = TRUE)
+        preview <- data_array[, cols, drop = FALSE]
+      } else {
+        preview <- do.call(rbind, lapply(data_array, function(x) {
+          res_cols <- grep("name|code", names(x), value = TRUE)
+          as.data.frame(x[res_cols])
+        }))
       }
 
-      # Perform the selection
-      list_selected <- list$treffer[selected_value, ]
+      print(preview)
+      cat("------------------------------------------------------------\n")
+
+      selected_value <- suppressWarnings(as.integer(readline(prompt = "Bitte einen Treffer waehlen: ")))
+
+      while (is.na(selected_value) || (selected_value < 1) || (selected_value > num_results)) {
+        selected_value <- suppressWarnings(as.integer(readline(prompt = "Ungueltige Eingabe. Bitte Zahl waehlen: ")))
+      }
+
+      if (is.data.frame(data_array)) {
+        selected_item <- data_array[selected_value, , drop = FALSE]
+      } else {
+        selected_item <- data_array[[selected_value]]
+      }
+
+      return(stats::setNames(list(list(selected_item)), data_key))
     } else {
-      # Case that there is only one or no match
-      list_selected <- list$treffer # Assign the "treffer" list
+      return(list)
     }
   }
-  return(list_selected)
 }
+
+
+
+

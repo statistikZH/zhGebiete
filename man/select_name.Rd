@@ -4,24 +4,19 @@
 \alias{select_name}
 \title{Namen bei Mehrfachtreffern auswaehlen}
 \usage{
-select_name(list, selection)
+select_name(list, selection, search_term = NULL)
 }
 \arguments{
 \item{list}{Eine aus einer API-Abfrage stammende Liste.}
 
-\item{selection}{Boolean, welcher beschreibt, ob eine Auswahl über die gefundenen
-Namen gemacht werden soll oder nicht. Verwendungszweck: beim Harmonisieren
-von Namen.}
+\item{selection}{Boolean, ob eine Auswahl erfolgen soll.}
+
+\item{search_term}{Optional: Der verwendete Suchbegriff für die Ausgabe.}
 }
 \value{
-Trefferliste mit dem ausgewählten Namen und ohne den Suchnamen.
+Trefferliste mit dem ausgewählten Namen im Original-Wrapper.
 }
 \description{
 Namen bei Mehrfachtreffern auswaehlen
-}
-\details{
-Diese Funktion erlaubt es zu identifizieren, ob eine Suche nach
-Namen mehrere Treffer geliefert hat. Falls ja, muessen Nutzende via Konsole
-ein Namen auswäaelen.
 }
 \keyword{internal}

@@ -5,3 +5,4 @@
 ^tic\.R$
 ^\.github$
 ^codecov\.yml$
+^scripts$
