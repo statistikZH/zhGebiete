@@ -55,9 +55,9 @@ call_and_parse <- function(request) {
 #' @description In dieser Funktion werden mögliche fehlerhafte Eingaben
 #' abgefangen.
 #'
-#' @param jahr Jahr von interesse.
-#' @param code Code der Gemeinde, Region oder Raumplanungsregion.
-#' @param name Name der Gemeinde, Region oder Raumplanungsregion.
+#' @param jahr Jahr von Interesse.
+#' @param code Code der Gemeinde, des Bezirks oder der Raumplanungsregion.
+#' @param name Name der Gemeinde, des Bezirks oder der Raumplanungsregion.
 #'
 #' @returns Kein Rückgabeobjekt.
 #'
